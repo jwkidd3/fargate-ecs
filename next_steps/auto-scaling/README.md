@@ -43,7 +43,40 @@ resource "aws_appautoscaling_target" "ecs_target" {
 
 This resource tells Application Auto Scaling to manage the `DesiredCount` of your ECS service, with a minimum of 1 task and a maximum of 6.
 
-### Step 3 — Add the Target-Tracking Scaling Policy
+### Step 3 — Stop Terraform Fighting the Autoscaler
+
+There is now a conflict in your configuration. Two things both believe they own
+`desired_count`:
+
+- **Terraform**, because `main.tf` still says `desired_count = 1`
+- **Application Auto Scaling**, which adjusts it based on CPU
+
+Once the policy scales you up to 4 tasks, your next `terraform plan` will report
+`desired_count: 4 -> 1` and `apply` will scale you straight back down — undoing the
+autoscaler.
+
+Fix it by telling Terraform to stop managing that one attribute. Find the
+`aws_ecs_service` resource in `main.tf` and add a `lifecycle` block:
+
+```hcl
+resource "aws_ecs_service" "nginx_service" {
+  name          = "userX-service"
+  ...
+  desired_count = 1
+
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
+}
+```
+
+`desired_count` still sets the **initial** count when the service is first created.
+After that, Terraform ignores drift on that attribute and leaves it to Auto Scaling.
+
+> **This is the single most common mistake when combining Terraform with ECS auto
+> scaling.** Without it, every `terraform apply` silently resets your scaling.
+
+### Step 4 — Add the Target-Tracking Scaling Policy
 
 Add this resource immediately after the scaling target:
 
@@ -66,7 +99,7 @@ resource "aws_appautoscaling_policy" "ecs_cpu_policy" {
 }
 ```
 
-### Step 4 — Understand What You Wrote
+### Step 5 — Understand What You Wrote
 
 | Attribute | Value | Purpose |
 |-----------|-------|---------|
@@ -204,6 +237,7 @@ This should produce no output.
 
 - How **ECS Service Auto Scaling** works with Application Auto Scaling
 - The difference between **manual scaling** (`desired_count`) and **automatic scaling** (target-tracking policies)
+- Why `lifecycle { ignore_changes = [desired_count] }` is required when Terraform and Auto Scaling manage the same service
 - How to define `aws_appautoscaling_target` and `aws_appautoscaling_policy` in Terraform
 - That target-tracking scaling uses CloudWatch metrics to maintain a target utilization
 - How **cooldown periods** prevent rapid scaling oscillation

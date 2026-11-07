@@ -90,6 +90,20 @@ resource "aws_lb_target_group" "tg" {
   protocol    = "HTTP"
   vpc_id      = data.aws_vpc.default.id
   target_type = "ip"
+
+  # Without this block the AWS defaults apply: 5 successful checks at 30s
+  # intervals, so a task takes 2.5 minutes to be marked healthy.
+  health_check {
+    path                = "/"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    interval            = 30
+    timeout             = 5
+    matcher             = "200"
+  }
+
+  # Defaults to 300s. Lowering it keeps `terraform destroy` fast in the lab.
+  deregistration_delay = 30
 }
 
 # 🔹 Create a Listener for ALB
@@ -104,6 +118,12 @@ resource "aws_lb_listener" "listener" {
   }
 }
 
+
+# 🔹 CloudWatch Log Group for Container Output
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name              = "/ecs/user0-task"
+  retention_in_days = 7
+}
 
 # 🔹 Define ECS Task Definition
 resource "aws_ecs_task_definition" "nginx" {
@@ -128,6 +148,15 @@ resource "aws_ecs_task_definition" "nginx" {
           protocol      = "tcp"
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ecs_logs.name
+          "awslogs-region"        = "us-east-1"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }

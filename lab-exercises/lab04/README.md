@@ -49,7 +49,8 @@ Take a few minutes to read through `main.tf`. The following table maps every res
 | ALB | `aws_lb` | Internet-facing Application Load Balancer | `user0-alb` |
 | Target Group | `aws_lb_target_group` | Route traffic to Fargate task IPs (target type `ip`) | `user0-target-group` |
 | Listener | `aws_lb_listener` | Listen on port 80 and forward to the target group | N/A |
-| Task Definition | `aws_ecs_task_definition` | Nginx container blueprint (256 CPU / 512 MiB memory, Fargate) | `user0-task` |
+| Log Group | `aws_cloudwatch_log_group` | Receive container stdout/stderr, 7-day retention | `/ecs/user0-task` |
+| Task Definition | `aws_ecs_task_definition` | Nginx blueprint (256 CPU / 512 MiB, Fargate) wired to the log group via `logConfiguration` | `user0-task` |
 | ECS Service | `aws_ecs_service` | Run and maintain desired count of tasks behind the ALB | `user0-service` |
 
 ### Key Observations
@@ -99,7 +100,30 @@ This command should return **no output**. If it does return matches, re-run the 
 
 ## 🏗️ Exercise 4.3: Deploy with Terraform
 
-### Step 1 -- Initialize Terraform
+### Step 1 -- Format and Check the Configuration
+
+Before deploying, run the two commands practitioners run constantly.
+
+`terraform fmt` rewrites your files to the canonical style. It prints the name of
+every file it changed:
+
+```bash
+terraform fmt
+```
+
+`terraform validate` checks the configuration for syntax errors and invalid
+arguments — without contacting AWS, so it is instant and free:
+
+```bash
+terraform validate
+```
+
+You should see `Success! The configuration is valid.`
+
+> **Note:** `validate` needs the provider schema, so if you see an error about
+> initialization, run Step 2 first and then come back.
+
+### Step 2 -- Initialize Terraform
 
 ```bash
 terraform init
@@ -107,7 +131,7 @@ terraform init
 
 This downloads the AWS provider plugin (~5.x) and sets up the working directory. You should see "Terraform has been successfully initialized!" in the output.
 
-### Step 2 -- Preview the Execution Plan
+### Step 3 -- Preview the Execution Plan
 
 ```bash
 terraform plan
@@ -125,7 +149,7 @@ Review the output carefully. You should see approximately **8 resources to add**
 
 > **Tip:** The `data` sources are read operations and do not count toward "resources to add."
 
-### Step 3 -- Apply the Configuration
+### Step 4 -- Apply the Configuration
 
 ```bash
 terraform apply
@@ -135,7 +159,7 @@ When prompted, type `yes` and press Enter.
 
 Watch the output as Terraform creates each resource. The deployment typically takes **2-4 minutes**, with the ALB and ECS service taking the longest.
 
-### Step 4 -- Retrieve the ALB DNS Name
+### Step 5 -- Retrieve the ALB DNS Name
 
 ```bash
 terraform state show aws_lb.alb | grep dns_name
@@ -191,6 +215,7 @@ You should see entries like:
 data.aws_iam_role.ecs_execution_role
 data.aws_subnets.default
 data.aws_vpc.default
+aws_cloudwatch_log_group.ecs_logs
 aws_ecs_cluster.main
 aws_ecs_service.nginx_service
 aws_ecs_task_definition.nginx
@@ -235,6 +260,7 @@ You have successfully deployed an ECS Fargate service running Nginx behind an Ap
 |-------|-------|----------|
 | `ClusterAlreadyExistsException` | A cluster with this name already exists (likely from Lab 2) | Verify Lab 2 cleanup is complete, or change the cluster name in `main.tf` to something unique |
 | `InvalidGroup.Duplicate` | A security group with this name already exists | Delete the leftover security group from the EC2 Console > Security Groups, then re-run `terraform apply` |
+| `ResourceAlreadyExistsException: The specified log group already exists` | The console created `/ecs/userX-task` in Lab 1 and it was not deleted | Delete it in **CloudWatch** > **Log groups**, then re-run `terraform apply` |
 | ALB returns `503 Service Temporarily Unavailable` | Task has not yet registered as healthy in the target group | Wait 1-2 minutes for the health check to pass, then retry |
 | `terraform init` fails with network error | Cloud9 network connectivity issue | Check your internet connection; try running `terraform init` again |
 | `No valid credential sources found` | AWS credentials not configured | In Cloud9 this should be automatic; verify by running `aws sts get-caller-identity` |

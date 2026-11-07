@@ -512,7 +512,7 @@
                     <div class="column">
                         <h3>Infrastructure as Code Skills</h3>
                         <ul>
-                            <li>Install and configure Terraform on Amazon Linux</li>
+                            <li>Build a working Cloud9 workstation with a single bootstrap script</li>
                             <li>Read and understand an ECS Terraform configuration</li>
                             <li>Deploy a complete ECS Fargate stack with Terraform</li>
                             <li>Modify, scale, and destroy infrastructure with Terraform</li>
@@ -885,7 +885,7 @@ resource "aws_security_group" "ecs_sg" {
                             <li>Pulls container images from ECR</li>
                             <li>Writes logs to CloudWatch</li>
                             <li>Retrieves secrets from Secrets Manager</li>
-                            <li>AWS provides: <code>ecsTaskExecutionRole</code></li>
+                            <li>AWS provides the <em>policy</em> (<code>AmazonECSTaskExecutionRolePolicy</code>); the role is created on first use or by an admin</li>
                         </ul>
                         <div class="highlight">
                             <p><strong>Think of it as:</strong> What permissions does ECS need to run my container?</p>
@@ -1059,6 +1059,9 @@ Internet ──▶ ALB (Listener :80)
                             <tr><td>Unhealthy threshold</td><td>3</td></tr>
                             <tr><td>Interval</td><td>30 seconds</td></tr>
                         </table>
+                        <div class="highlight">
+                            <p><strong>These are overrides.</strong> AWS defaults to 5 healthy / 2 unhealthy, which takes 2.5 min to mark a task healthy. Two checks gets there in 1 min.</p>
+                        </div>
                     </div>
                     <div class="column">
                         <h3>Terraform Code</h3>
@@ -1068,6 +1071,15 @@ Internet ──▶ ALB (Listener :80)
   protocol    = "HTTP"
   vpc_id      = data.aws_vpc.default.id
   target_type = "ip"  # Required for Fargate
+
+  health_check {
+    path                = "/"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    interval            = 30
+  }
+
+  deregistration_delay = 30
 }
 
 resource "aws_lb_listener" "listener" {
@@ -1439,7 +1451,8 @@ resource "aws_ecs_service" "nginx_service" {
                     <tr><td>ALB</td><td><code>aws_lb</code></td><td>Internet-facing load balancer</td><td>user0-alb</td></tr>
                     <tr><td>Target Group</td><td><code>aws_lb_target_group</code></td><td>Route traffic to task IPs</td><td>user0-target-group</td></tr>
                     <tr><td>Listener</td><td><code>aws_lb_listener</code></td><td>Listen on port 80</td><td>N/A</td></tr>
-                    <tr><td>Task Def</td><td><code>aws_ecs_task_definition</code></td><td>Nginx container blueprint</td><td>user0-task</td></tr>
+                    <tr><td>Log Group</td><td><code>aws_cloudwatch_log_group</code></td><td>Container logs, 7-day retention</td><td>/ecs/user0-task</td></tr>
+                    <tr><td>Task Def</td><td><code>aws_ecs_task_definition</code></td><td>Nginx blueprint + awslogs config</td><td>user0-task</td></tr>
                     <tr><td>Service</td><td><code>aws_ecs_service</code></td><td>Run and maintain tasks</td><td>user0-service</td></tr>
                 </table>
                 <div class="highlight">
@@ -1789,7 +1802,7 @@ output "service_name" {
                         <h3>Bonus Labs (in <code>next_steps/</code>)</h3>
                         <ul>
                             <li><strong>Terraform Outputs</strong> - expose the ALB DNS and cluster names as outputs (15 min)</li>
-                            <li><strong>Write a Terraform Resource</strong> - add a CloudWatch log group and wire container logging (30 min)</li>
+                            <li><strong>Write Terraform From Scratch</strong> - replace the <code>sed</code> workflow with a declared input variable (30 min)</li>
                             <li><strong>Build &amp; Deploy a Custom Image</strong> - create an ECR repo, build a Docker image, push and deploy (45 min)</li>
                             <li><strong>ECS Service Auto Scaling</strong> - add a target-tracking policy that scales on CPU utilization (30 min)</li>
                         </ul>

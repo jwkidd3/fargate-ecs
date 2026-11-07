@@ -73,7 +73,7 @@ fargate-ecs/
 │   └── lab05/README.md                    # Lab 5: Modify, Scale & Destroy
 ├── next_steps/
 │   ├── terraform-outputs/README.md        # Bonus: Expose values with Terraform outputs
-│   ├── write-terraform-resource/README.md # Bonus: Add CloudWatch log group in Terraform
+│   ├── write-terraform-variables/README.md # Bonus: Replace sed with a Terraform variable
 │   ├── ecr-custom-image/README.md         # Bonus: Build & deploy custom image via ECR
 │   └── auto-scaling/README.md             # Bonus: ECS Service Auto Scaling policy
 └── archive/                               # Pre-course reference material
@@ -131,7 +131,7 @@ Four self-paced bonus exercises in [`next_steps/`](next_steps/) for students who
 | Bonus Lab | Duration | What You'll Do |
 |-----------|----------|----------------|
 | [Terraform Outputs](next_steps/terraform-outputs/README.md) | 15 min | Expose the ALB DNS name and cluster names as outputs, and query them with `terraform output` |
-| [Write a Terraform Resource](next_steps/write-terraform-resource/README.md) | 30 min | Add a CloudWatch log group resource and wire container logging — write Terraform from scratch |
+| [Write Terraform From Scratch](next_steps/write-terraform-variables/README.md) | 30 min | Replace the `sed` workflow with a declared input variable — author Terraform by hand |
 | [Build & Deploy a Custom Image](next_steps/ecr-custom-image/README.md) | 45 min | Create an ECR repository, build a custom Docker image, push to ECR, deploy via Terraform |
 | [ECS Service Auto Scaling](next_steps/auto-scaling/README.md) | 30 min | Add a target-tracking auto scaling policy that scales tasks based on CPU utilization |
 

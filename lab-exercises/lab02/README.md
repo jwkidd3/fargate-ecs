@@ -173,7 +173,23 @@ Resource deletion must follow the correct dependency order. Deleting resources o
 
 > **Note:** If a security group deletion fails with a "dependency violation" error, it means ENIs are still attached from recently stopped tasks. Wait 2-3 minutes and try again.
 
-### Step 8 — Verify All Resources Are Removed
+### Step 8 — Delete the CloudWatch Log Group
+
+The console created `/ecs/userX-task` automatically when it registered your task
+definition. In Lab 4, **Terraform creates a log group with this same name** — so it
+must be gone first, or `terraform apply` will fail with `ResourceAlreadyExists`.
+
+1. Open the **CloudWatch Console**
+2. In the left sidebar, expand **Logs** and click **Log groups**
+3. Select `/ecs/userX-task`
+4. Click **Actions** > **Delete log group(s)** and confirm
+
+> **On cost:** stored logs are billed per GB and retained forever unless you set a
+> retention policy. The console does not set one. The Terraform config you deploy in
+> Lab 4 sets `retention_in_days = 7` — one line that stops logs accumulating
+> indefinitely.
+
+### Step 9 — Verify All Resources Are Removed
 
 Perform a final check across each console:
 
@@ -184,7 +200,7 @@ Perform a final check across each console:
 | **EC2** > Load Balancers | No `userX-alb` | Empty or no matching ALBs |
 | **EC2** > Target Groups | No `userX-target-group` | Empty or no matching TGs |
 | **EC2** > Security Groups | No `userX-alb-sg` or `userX-ecs-sg` | Only default SG remains |
-| **CloudWatch** > Log Groups | `/ecs/userX-task` may remain | OK to leave — no cost impact |
+| **CloudWatch** > Log Groups | No `/ecs/userX-task` | Deleted in Step 8 |
 
 > **If any resources remain, delete them now. The Terraform labs in the afternoon will create resources with similar names and will fail if duplicates exist.**
 
@@ -204,6 +220,7 @@ Perform a final check across each console:
 - [ ] Deleted ECS cluster
 - [ ] Deleted ALB and target group
 - [ ] Deleted both security groups
+- [ ] Deleted the `/ecs/userX-task` log group
 - [ ] Verified all resources are removed
 
 ### Key Observation

@@ -220,7 +220,7 @@ This should produce **no output**, confirming that Terraform is no longer tracki
 
 ### 🎉 Success
 
-An empty state list is your proof: Terraform tracked eleven resources a moment
+An empty state list is your proof: Terraform tracked twelve entries a moment
 ago and now tracks none.
 
 **Compare this one-command cleanup to the 8-step manual cleanup in Lab 2.** There

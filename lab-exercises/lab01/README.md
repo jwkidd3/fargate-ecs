@@ -102,7 +102,14 @@ In the **Container - 1** section, configure:
 | **Container port** | `80` |
 | **Protocol** | **TCP** |
 
-Leave all other container settings at their defaults.
+Scroll down to the **Logging** section and confirm **Use log collection** is
+**turned on** (it is on by default). Leave all other container settings at their
+defaults.
+
+> **Note:** This one toggle is what sends your container's stdout/stderr to
+> CloudWatch Logs. It creates a log group named `/ecs/userX-task` and configures the
+> `awslogs` driver for you. You will explore those logs in Lab 2, and write the same
+> configuration by hand in Terraform in Lab 4.
 
 ### Step 4 — Create and Review
 
@@ -199,9 +206,22 @@ Before deploying the ECS service, you will create an Application Load Balancer (
 | **VPC** | Default |
 | **Health check path** | `/` |
 
-3. Click **Next**
-4. Do **not** register any targets manually — ECS will handle this automatically
-5. Click **Create target group**
+3. Expand **Advanced health check settings** and set:
+
+| Setting | Value |
+|---------|-------|
+| **Healthy threshold** | `2` |
+| **Unhealthy threshold** | `3` |
+| **Interval** | `30` seconds |
+
+> **Why change these?** The defaults are 5 consecutive successes at 30-second
+> intervals, so a task takes **2.5 minutes** to be marked healthy. Two successes
+> gets you there in **1 minute** — the same values you will set in Terraform in
+> Lab 4.
+
+4. Click **Next**
+5. Do **not** register any targets manually — ECS will handle this automatically
+6. Click **Create target group**
 
 ### Step 7 — Configure the Listener
 
