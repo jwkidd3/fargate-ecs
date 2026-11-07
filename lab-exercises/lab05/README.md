@@ -2,17 +2,17 @@
 
 | | |
 |---|---|
-| **Duration** | 45 minutes |
+| **Duration** | 42 minutes |
 | **Level** | Introductory |
-| **Environment** | AWS Cloud9 (Amazon Linux) |
+| **Environment** | AWS Cloud9 on Amazon Linux 2 (built in Lab 3) |
 | **Prerequisite** | Lab 4 completed successfully (resources still deployed) |
-| **Goal** | Scale an ECS service, modify task resources, add outputs, and perform a clean teardown -- all with Terraform |
+| **Goal** | Scale an ECS service, modify task resources, and perform a clean teardown -- all with Terraform |
 
 ---
 
 ## 📋 Overview
 
-In Lab 4 you deployed a complete ECS Fargate environment with a single `terraform apply`. In this lab you will experience the real power of Infrastructure as Code: **modifying live infrastructure through code changes**. You will scale the service, adjust container resources, add Terraform outputs, and finally destroy everything with one command.
+In Lab 4 you deployed a complete ECS Fargate environment with a single `terraform apply`. In this lab you will experience the real power of Infrastructure as Code: **modifying live infrastructure through code changes**. You will scale the service, adjust container resources, and finally destroy everything with one command.
 
 ---
 
@@ -180,82 +180,7 @@ Type `yes` when prompted. Watch as Terraform creates the new task definition rev
 
 ---
 
-## 📤 Exercise 5.3: Add Terraform Outputs
-
-Terraform **outputs** let you expose specific values from your infrastructure. They are useful for scripting, CI/CD pipelines, and cross-stack references.
-
-### Step 1 -- Add Output Blocks
-
-Open `main.tf` and add the following at the **bottom** of the file:
-
-```hcl
-output "alb_dns_name" {
-  description = "DNS name of the Application Load Balancer"
-  value       = aws_lb.alb.dns_name
-}
-
-output "cluster_name" {
-  description = "Name of the ECS cluster"
-  value       = aws_ecs_cluster.main.name
-}
-
-output "service_name" {
-  description = "Name of the ECS service"
-  value       = aws_ecs_service.nginx_service.name
-}
-```
-
-Save the file.
-
-### Step 2 -- Apply the Outputs
-
-```bash
-terraform apply
-```
-
-Type `yes` when prompted. Notice the plan summary:
-
-```
-No changes. Your infrastructure matches the configuration.
-```
-
-Outputs do not cause any infrastructure changes -- they simply extract and display values from the state.
-
-After the apply completes, the output values are printed at the bottom:
-
-```
-Outputs:
-
-alb_dns_name = "userX-alb-1234567890.us-east-1.elb.amazonaws.com"
-cluster_name = "userX-cluster"
-service_name = "userX-service"
-```
-
-### Step 3 -- Query Outputs
-
-List all outputs:
-
-```bash
-terraform output
-```
-
-Query a single output (useful in scripts):
-
-```bash
-terraform output alb_dns_name
-```
-
-Query a single output with no quotes (raw mode, ideal for piping):
-
-```bash
-terraform output -raw alb_dns_name
-```
-
-> **Tip:** In production, outputs are frequently used to pass values between Terraform modules or to CI/CD pipelines. For example: `curl http://$(terraform output -raw alb_dns_name)`
-
----
-
-## 💥 Exercise 5.4: Destroy All Resources
+## 💥 Exercise 5.3: Destroy All Resources
 
 One of the most powerful benefits of Infrastructure as Code is **clean, complete teardown**.
 
@@ -293,27 +218,26 @@ This should produce **no output**, confirming that Terraform is no longer tracki
 
 ---
 
-## 🔍 Exercise 5.5: Verify Cleanup in the AWS Console
-
-### Step 1 -- Check ECS
-
-1. Open the **ECS Console**: [https://console.aws.amazon.com/ecs](https://console.aws.amazon.com/ecs)
-2. Confirm your cluster **no longer appears** in the cluster list
-
-### Step 2 -- Check EC2 Resources
-
-1. Open the **EC2 Console**: [https://console.aws.amazon.com/ec2](https://console.aws.amazon.com/ec2)
-2. Navigate to **Load Balancers** -- confirm your ALB is gone
-3. Navigate to **Target Groups** -- confirm your target group is gone
-4. Navigate to **Security Groups** -- confirm your `userX_ALB` and `userX_ECS` security groups are gone
-
 ### 🎉 Success
 
-**Compare this one-command cleanup to the 8-step manual cleanup process in Lab 2.** In Lab 2, you had to individually delete the ECS service, wait for tasks to drain, deregister task definitions, delete the cluster, delete the ALB, delete the target group, and remove two security groups -- each requiring multiple console clicks in the correct dependency order. With Terraform, a single `terraform destroy` handled everything automatically. **This is the power of Infrastructure as Code.**
+An empty state list is your proof: Terraform tracked eleven resources a moment
+ago and now tracks none.
+
+**Compare this one-command cleanup to the 8-step manual cleanup in Lab 2.** There
+you deleted the ECS service, waited for tasks to drain, deregistered the task
+definition, deleted the cluster, the ALB, the target group, and two security
+groups -- each one several console clicks, all in the correct dependency order.
+Here, a single `terraform destroy` did the lot. **This is the power of
+Infrastructure as Code.**
+
+> **Want to double-check in the console?** Open **ECS** > **Clusters** and
+> **EC2** > **Load Balancers / Target Groups / Security Groups**. Everything
+> prefixed with your username should be gone. The empty state list already tells
+> you this, so treat it as optional.
 
 ---
 
-## 🎓 Exercise 5.6: Course Wrap-Up
+## 🎓 Exercise 5.4: Course Wrap-Up
 
 ### Console vs. Terraform -- Side-by-Side Comparison
 

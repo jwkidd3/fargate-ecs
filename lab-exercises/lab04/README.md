@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| **Duration** | 45 minutes |
+| **Duration** | 40 minutes |
 | **Level** | Introductory |
-| **Environment** | AWS Cloud9 (Amazon Linux) |
+| **Environment** | AWS Cloud9 on Amazon Linux 2 (built in Lab 3) |
 | **Goal** | Deploy a fully functional ECS Fargate service using a pre-built Terraform configuration |
 | **Prerequisite** | Lab 3 completed (Terraform installed) |
 
@@ -215,21 +215,9 @@ terraform state show aws_ecs_service.nginx_service
 
 Observe the service configuration including `desired_count`, `launch_type`, `network_configuration`, and the `load_balancer` block.
 
-### Step 3 -- Examine the State File
-
-```bash
-ls -la terraform.tfstate
-```
-
-This is a JSON file that contains the full state of every resource. In production, this file would be stored remotely (e.g., in S3) rather than locally.
-
-### Step 4 -- Reflect
-
-Compare this Terraform-driven deployment to the manual console steps in Labs 1 and 2. Consider:
-
-- How many clicks and pages did the console workflow require?
-- How long did it take compared to `terraform apply`?
-- Could you repeat the console workflow exactly the same way every time?
+> **In production**, `terraform.tfstate` is stored remotely (for example in S3
+> with DynamoDB locking) so a whole team can share one source of truth. Here it
+> sits in your lab directory.
 
 ---
 

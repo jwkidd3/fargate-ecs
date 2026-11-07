@@ -1,9 +1,9 @@
-# 🛠️ Lab 3: Install Terraform on Amazon Linux
+# 🛠️ Lab 3: Build Your Cloud9 Workstation
 
-**Duration:** 45 minutes
+**Duration:** 46 minutes
 **Difficulty:** Introductory
 **Day:** 1
-**Environment:** AWS Cloud9
+**Environment:** AWS Cloud9 on Amazon Linux 2
 
 ---
 
@@ -11,8 +11,8 @@
 
 By the end of this lab, you will have:
 
-- Opened your Cloud9 environment for the Terraform labs (or created a new one if needed)
-- Installed Terraform on your Cloud9 Amazon Linux instance using HashiCorp's official repository
+- Created your own AWS Cloud9 environment on Amazon Linux 2
+- Run `bootstrap.sh` to grow the root disk to 100 GB and install every tool the course needs
 - Explored essential Terraform commands and their purposes
 - Verified that Terraform can authenticate with AWS
 - Created an ECS cluster with Terraform and verified it in the AWS Console
@@ -20,20 +20,19 @@ By the end of this lab, you will have:
 
 ---
 
-## 🖥️ Exercise 3.1: Open Your Cloud9 Environment
+## 🖥️ Exercise 3.1: Create Your Cloud9 Environment
 
-You will continue using the Cloud9 environment you created in Lab 1. If your environment is still running, open it and skip to Exercise 3.2.
+Labs 1 and 2 were entirely console-based. From here on you need a terminal, so
+this is where you build your workstation. You will use this environment for the
+rest of the course, including the bonus labs.
 
-### Step 1 — Open Your Existing Environment
+### Step 1 — Navigate to Cloud9
 
 1. Sign in to the **AWS Management Console**
-2. In the top navigation bar, confirm the region is **US East (N. Virginia) us-east-1**
+2. In the top navigation bar, set the region to **US East (N. Virginia) us-east-1**
 3. In the search bar, type **Cloud9** and select it from the results
-4. Find your environment (named with your assigned username) and click **Open**
 
-> **If your Cloud9 environment is no longer available** (deleted or expired), follow the steps below to create a new one. Otherwise, skip to Exercise 3.2.
-
-### Creating a New Cloud9 Environment (only if needed)
+### Step 2 — Create the Environment
 
 1. Click **Create environment**
 2. Set the **Name** to your assigned username (e.g., `user1`, `user2`, `user3`)
@@ -43,92 +42,105 @@ You will continue using the Cloud9 environment you created in Lab 1. If your env
 |---------|-------|
 | **Environment type** | New EC2 instance |
 | **Instance type** | m5.large (8 GiB RAM + 2 vCPU) |
-| **Platform** | Amazon Linux |
+| **Platform** | **Amazon Linux 2** |
 | **Timeout** | 30 minutes |
 | **Connection** | **Secure Shell (SSH)** |
 
-> **IMPORTANT:** You must select **Secure Shell (SSH)** as the connection type. Do **not** use AWS Systems Manager (SSM). Selecting SSM will cause networking issues in later exercises.
+> **IMPORTANT:** Select **Secure Shell (SSH)** as the connection type. Do **not**
+> use AWS Systems Manager (SSM) — it causes networking issues in later exercises.
 
 4. Leave **VPC** and **Subnet** at their default values
 5. Click **Create**
-6. Wait for the environment to provision (this may take 1-2 minutes)
-7. Click the **Open** link next to your environment name to launch the Cloud9 IDE
 
-If you created a new environment, clone the course repository:
+### Step 3 — Open the IDE
+
+1. Wait for the environment to provision (this may take 1-2 minutes)
+2. Click the **Open** link next to your environment name
+
+> **IMPORTANT:** Every remaining command in this course runs inside the **Cloud9
+> terminal** — the shell panel at the bottom of the IDE. If you do not see one,
+> go to **Window > New Terminal**.
+
+### Step 4 — Clone the Course Repository
 
 ```bash
 cd ~/environment
 git clone https://github.com/jwkidd3/fargate-ecs.git
 ```
 
-### Step 2 — Verify Environment
-
-Run the following commands in the **Cloud9 terminal**:
-
 ```bash
-# Verify Amazon Linux
-cat /etc/os-release
-
-# Verify the course repo is present
+# Confirm all five labs are present
 ls ~/environment/fargate-ecs/lab-exercises/
 ```
 
-You should see directories for all five labs.
-
 ---
 
-## 🔧 Exercise 3.2: Install Terraform
+## 🚀 Exercise 3.2: Run the Bootstrap Script
 
-### Step 1 — Open Your Cloud9 Terminal
+A fresh Cloud9 environment ships with a **10 GB** root disk and no Terraform.
+One script fixes both.
 
-In your Cloud9 workspace, ensure you have a terminal panel open. If not, go to **Window > New Terminal**.
+### Step 1 — Read Before You Run
 
-### Step 2 — Install Terraform Using HashiCorp's Official Repository
-
-Run the following commands to add the HashiCorp repository and install Terraform:
-
-```bash
-sudo yum install -y yum-utils
-```
+Never run a script you have not looked at. Open it and see what it will do:
 
 ```bash
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+cd ~/environment/fargate-ecs
+less scripts/bootstrap.sh
 ```
+
+Press `q` to exit. The script performs six steps:
+
+| # | Step | What It Does |
+|---|------|--------------|
+| 1 | Grow the disk | Calls `ec2:ModifyVolume` to resize the root EBS volume to 100 GB, then runs `growpart` and `xfs_growfs` so the filesystem actually uses the new space |
+| 2 | Terraform | Adds HashiCorp's official RPM repository and installs Terraform |
+| 3 | AWS CLI v2 | Upgrades the preinstalled CLI (the ECR bonus lab needs `aws ecr get-login-password`, which v1 does not have) |
+| 4 | Utilities | Installs `jq`, `tree`, `git`, `unzip` |
+| 5 | Docker | Installs and starts Docker, and adds you to the `docker` group |
+| 6 | Completion | Enables Terraform tab completion |
+
+> **Why 100 GB?** The 10 GB default fills up quickly once you start building
+> container images in the bonus labs. Resizing now avoids a confusing
+> "no space left on device" failure later.
+
+### Step 2 — Run It
 
 ```bash
-sudo yum -y install terraform
+./scripts/bootstrap.sh
 ```
 
-### Step 3 — Verify the Installation
+The disk resize waits on AWS, so the whole run takes **3-5 minutes**. You will
+see a `[ ok ]` line for each step as it completes.
 
-Confirm Terraform is installed and accessible:
+> **Note:** The script is safe to re-run. Every step checks the current state
+> first, so running it twice does no harm.
+
+### Step 3 — Read the Summary
+
+The script ends with an environment summary. Confirm all of the following:
+
+```
+  OS               Amazon Linux 2
+  Disk (/)         99G total, ... free
+  Terraform        Terraform v1.x.x
+  AWS CLI          aws-cli/2.x.x ...
+  Docker           Docker version ...
+  AWS region       us-east-1
+  AWS identity     arn:aws:sts::...
+```
+
+If the script finished with warnings, **show them to your instructor before
+continuing** — most warnings mean a later lab will fail.
+
+### Step 4 — Confirm the Disk Grew
 
 ```bash
-terraform version
+df -h /
 ```
 
-You should see output similar to:
-
-```
-Terraform v1.x.x
-on linux_amd64
-```
-
-### Step 4 — Enable Tab Completion
-
-Enable Terraform command auto-completion for a smoother workflow:
-
-```bash
-terraform -install-autocomplete
-```
-
-Reload your shell profile to activate it immediately:
-
-```bash
-source ~/.bashrc
-```
-
-You can now press **Tab** while typing Terraform commands to auto-complete them.
+The **Size** column should read roughly `99G`. If it still says `10G`, see the
+troubleshooting section at the end of this lab.
 
 ---
 
@@ -318,29 +330,7 @@ cluster_name = "userX-test-cluster"
 
 You just created the same type of resource from Lab 1 — but with a single command instead of clicking through the console.
 
-### Step 7 — Explore the Terraform State
-
-List the resources Terraform is tracking:
-
-```bash
-terraform state list
-```
-
-You should see:
-
-```
-aws_ecs_cluster.test
-```
-
-Inspect the cluster details:
-
-```bash
-terraform state show aws_ecs_cluster.test
-```
-
-This shows every attribute of the cluster that Terraform recorded, including the ARN, name, and status.
-
-### Step 8 — Destroy the Cluster
+### Step 7 — Destroy the Cluster
 
 ```bash
 terraform destroy
@@ -352,14 +342,14 @@ When prompted, type **yes** and press Enter. Terraform will remove the ECS clust
 Destroy complete! Resources: 1 destroyed.
 ```
 
-### Step 9 — Verify Cleanup
+### Step 8 — Verify Cleanup
 
 1. Return to the **ECS Console** and refresh the Clusters page
 2. Confirm that `userX-test-cluster` is **no longer listed**
 
 One command created the cluster. One command destroyed it. In Lab 4, you will use this same workflow to deploy an entire ECS Fargate stack — cluster, security groups, ALB, task definition, and service — all at once.
 
-### Step 10 — Remove the Test Directory
+### Step 9 — Remove the Test Directory
 
 ```bash
 cd ~/environment && rm -rf terraform-test
@@ -396,15 +386,51 @@ Wait 1-2 minutes and try again. Cloud9 environments can take time to fully provi
 
 ### "terraform: command not found"
 
-- Verify the installation completed without errors by re-running `sudo yum -y install terraform`
-- Check that Terraform is on your PATH:
+- Re-run the bootstrap script: `./scripts/bootstrap.sh` (it is safe to run twice)
+- Check whether the binary landed on your PATH:
   ```bash
   which terraform
   ```
-- If the binary exists but is not found, add its location to your PATH:
+- If the install step reported a failure, install it directly and tell your instructor:
   ```bash
-  export PATH=$PATH:/usr/bin
+  sudo yum install -y yum-utils
+  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+  sudo yum -y install terraform
   ```
+
+### The disk is still 10 GB after running bootstrap.sh
+
+Check what the script reported. The resize is best-effort by design, so the
+script continues installing tools even when it cannot grow the volume.
+
+- **"Could not find the root EBS volume"** or **"ec2:ModifyVolume failed"** — your
+  environment lacks EC2 permissions. Ask your instructor; the tools are still
+  installed and Labs 3-5 will work on a 10 GB disk. Only the ECR bonus lab needs
+  the extra space.
+- **"volume was modified in the last 6 hours"** — AWS enforces a cooldown between
+  EBS modifications. The volume may already be 100 GB at the AWS level while the
+  filesystem has not caught up. Grow just the filesystem:
+  ```bash
+  sudo growpart $(lsblk -no pkname $(findmnt -no SOURCE /) | sed 's|^|/dev/|') 1
+  sudo xfs_growfs -d /
+  df -h /
+  ```
+- **The summary shows 99G but `df -h /` shows 10G** — the filesystem grow did not
+  run. Use the two commands above.
+
+### bootstrap.sh exits with "The AWS CLI was not found"
+
+You are not in a Cloud9 terminal. Confirm you clicked **Open** on your Cloud9
+environment and are typing into the shell panel at the bottom of the IDE, not a
+local terminal on your own machine.
+
+### "Permission denied" when running bootstrap.sh
+
+The executable bit was lost in transit. Restore it:
+
+```bash
+chmod +x ~/environment/fargate-ecs/scripts/bootstrap.sh
+```
 
 ### AWS Credentials Error
 

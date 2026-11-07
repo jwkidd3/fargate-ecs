@@ -218,6 +218,10 @@
             z-index: 1000;
         }
 
+        .agenda-table { font-size: 0.58em; width: 100%; }
+        .agenda-table th, .agenda-table td { padding: 3px 7px; line-height: 1.25; }
+        .agenda-table td:first-child { white-space: nowrap; font-weight: 600; }
+
         @media screen and (min-width: 1600px) {
             .reveal {
                 font-size: 32px;
@@ -458,53 +462,36 @@
                 <h2><span class="emoji">📋</span> Course Agenda</h2>
                 <div class="two-column">
                     <div class="column">
-                        <h3><span class="emoji">🌅</span> Morning: ECS Fundamentals</h3>
-                        <ul>
-                            <li><strong>Module 1: Introduction to Amazon ECS</strong>
-                                <ul><li>Containers and why they matter</li>
-                                <li>ECS core concepts and Fargate</li>
-                                <li>Task definitions, services, clusters</li></ul>
-                            </li>
-                            <li><strong>Lab 1: Deploy Nginx via Console</strong>
-                                <ul><li>Create cluster, task def, ALB, service</li>
-                                <li>Full deployment behind load balancer</li></ul>
-                            </li>
-                            <li><strong>Module 2: Architecture &amp; Networking</strong>
-                                <ul><li>ALB integration and security groups</li>
-                                <li>IAM roles, scaling, logging</li></ul>
-                            </li>
-                            <li><strong>Lab 2: Scaling, Logging &amp; Cleanup</strong>
-                                <ul><li>Scale to 3 tasks, explore CloudWatch</li>
-                                <li>Clean up all console resources</li></ul>
-                            </li>
-                        </ul>
+                        <h3 style="margin: 0 0 8px 0;"><span class="emoji">🌅</span> Morning: ECS Fundamentals</h3>
+                        <table class="agenda-table">
+                            <tr><th>Time</th><th>Block</th></tr>
+                            <tr><td>9:00</td><td>Welcome, agenda, objectives</td></tr>
+                            <tr><td>9:07</td><td><strong>Module 1:</strong> Introduction to Amazon ECS</td></tr>
+                            <tr><td>9:40</td><td><em>Break</em></td></tr>
+                            <tr><td>9:55</td><td><strong>Lab 1:</strong> Deploy Nginx via Console</td></tr>
+                            <tr><td>10:45</td><td><strong>Module 2:</strong> Architecture &amp; Networking</td></tr>
+                            <tr><td>11:10</td><td><strong>Lab 2:</strong> Scaling, Logging &amp; Cleanup</td></tr>
+                            <tr><td>11:40</td><td>Morning recap</td></tr>
+                            <tr><td>11:45</td><td><em>Lunch</em></td></tr>
+                        </table>
                     </div>
                     <div class="column">
-                        <h3><span class="emoji">🌆</span> Afternoon: Infrastructure as Code</h3>
-                        <ul>
-                            <li><strong>Module 3: IaC for ECS</strong>
-                                <ul><li>Why Terraform for containers</li>
-                                <li>Reading the ECS Terraform config</li></ul>
-                            </li>
-                            <li><strong>Lab 3: Install Terraform</strong>
-                                <ul><li>Install on Amazon Linux</li>
-                                <li>Create an ECS cluster with Terraform</li>
-                                <li>Full init / plan / apply / destroy lifecycle</li></ul>
-                            </li>
-                            <li><strong>Module 4: Deploy &amp; Manage with Terraform</strong>
-                                <ul><li>State, dependencies, outputs</li></ul>
-                            </li>
-                            <li><strong>Lab 4: Deploy ECS with Terraform</strong>
-                                <ul><li>Full ECS stack in one command</li></ul>
-                            </li>
-                            <li><strong>Lab 5: Modify, Scale &amp; Destroy</strong>
-                                <ul><li>Scale, update, add outputs, destroy</li></ul>
-                            </li>
-                        </ul>
-                        <div class="highlight" style="margin-top: 15px;">
-                            <p><strong>🏆 Course Outcome:</strong> Deploy and manage containerized applications on AWS ECS Fargate using both the console and Terraform</p>
-                        </div>
+                        <h3 style="margin: 0 0 8px 0;"><span class="emoji">🌆</span> Afternoon: Infrastructure as Code</h3>
+                        <table class="agenda-table">
+                            <tr><th>Time</th><th>Block</th></tr>
+                            <tr><td>12:45</td><td><strong>Module 3:</strong> IaC for ECS</td></tr>
+                            <tr><td>1:03</td><td><strong>Lab 3:</strong> Build Your Cloud9 Workstation</td></tr>
+                            <tr><td>1:49</td><td><em>Break</em></td></tr>
+                            <tr><td>2:04</td><td><strong>Module 4:</strong> Deploy &amp; Manage</td></tr>
+                            <tr><td>2:20</td><td><strong>Lab 4:</strong> Deploy ECS with Terraform</td></tr>
+                            <tr><td>3:00</td><td><strong>Lab 5:</strong> Modify, Scale &amp; Destroy</td></tr>
+                            <tr><td>3:42</td><td>Course recap and next steps</td></tr>
+                            <tr><td>3:49</td><td><em>Ends</em> - 11 min float to 4:00</td></tr>
+                        </table>
                     </div>
+                </div>
+                <div class="highlight" style="margin-top: 10px;">
+                    <p><strong>🏆 Course Outcome:</strong> Deploy and manage containerized applications on AWS ECS Fargate using both the console and Terraform</p>
                 </div>
             </section>
 
@@ -515,21 +502,21 @@
                     <div class="column">
                         <h3>ECS Core Skills</h3>
                         <ul>
-                            <li class="fragment">Explain the ECS architecture: clusters, task definitions, tasks, and services</li>
-                            <li class="fragment">Compare Fargate and EC2 launch types and choose the right fit</li>
-                            <li class="fragment">Deploy containerized applications using the AWS Console</li>
-                            <li class="fragment">Configure Application Load Balancers for ECS services</li>
-                            <li class="fragment">Scale ECS services and monitor with CloudWatch</li>
+                            <li>Explain the ECS architecture: clusters, task definitions, tasks, and services</li>
+                            <li>Compare Fargate and EC2 launch types and choose the right fit</li>
+                            <li>Deploy containerized applications using the AWS Console</li>
+                            <li>Configure Application Load Balancers for ECS services</li>
+                            <li>Scale ECS services and monitor with CloudWatch</li>
                         </ul>
                     </div>
                     <div class="column">
                         <h3>Infrastructure as Code Skills</h3>
                         <ul>
-                            <li class="fragment">Install and configure Terraform on Amazon Linux</li>
-                            <li class="fragment">Read and understand an ECS Terraform configuration</li>
-                            <li class="fragment">Deploy a complete ECS Fargate stack with Terraform</li>
-                            <li class="fragment">Modify, scale, and destroy infrastructure with Terraform</li>
-                            <li class="fragment">Compare manual vs IaC deployment workflows</li>
+                            <li>Install and configure Terraform on Amazon Linux</li>
+                            <li>Read and understand an ECS Terraform configuration</li>
+                            <li>Deploy a complete ECS Fargate stack with Terraform</li>
+                            <li>Modify, scale, and destroy infrastructure with Terraform</li>
+                            <li>Compare manual vs IaC deployment workflows</li>
                         </ul>
                     </div>
                 </div>
@@ -549,9 +536,8 @@
                 <h2><span class="emoji">🐳</span> What Are Containers and Why They Matter</h2>
                 <div class="two-column">
                     <div class="column">
-                        <h3>Traditional Deployment Problems</h3>
                         <div class="danger">
-                            <p><strong>Common issues:</strong></p>
+                            <p><strong>Traditional deployment problems:</strong></p>
                             <ul>
                                 <li>"It works on my machine" syndrome</li>
                                 <li>Environment inconsistencies across dev, staging, prod</li>
@@ -559,102 +545,63 @@
                                 <li>Dependency conflicts between applications</li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="column">
-                        <h3>Container Benefits</h3>
                         <div class="success">
                             <p><strong>Containers solve this:</strong></p>
                             <ul>
                                 <li>Package app + dependencies together</li>
                                 <li>Identical behavior everywhere</li>
                                 <li>Start in seconds, not minutes</li>
-                                <li>Run many containers on one host</li>
                                 <li>Lightweight isolation without full VM overhead</li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3>Containers vs Virtual Machines</h3>
+                        <table>
+                            <tr><th>Aspect</th><th>Virtual Machines</th><th>Containers</th></tr>
+                            <tr><td>Startup Time</td><td>Minutes</td><td>Seconds</td></tr>
+                            <tr><td>Resource Usage</td><td>Heavy (full OS)</td><td>Lightweight (shared kernel)</td></tr>
+                            <tr><td>Isolation</td><td>Strong (hardware-level)</td><td>Process-level</td></tr>
+                            <tr><td>Portability</td><td>Limited</td><td>Runs anywhere with a container runtime</td></tr>
+                            <tr><td>Density</td><td>Few per host</td><td>Many per host</td></tr>
+                        </table>
+                        <div class="highlight">
+                            <p>A VM virtualizes <strong>hardware</strong> and carries a full guest OS. A container virtualizes the <strong>operating system</strong> and shares the host kernel.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Containers vs VMs -->
-            <section>
-                <h2><span class="emoji">⚖️</span> Containers vs Virtual Machines</h2>
-                <div class="architecture-diagram" style="font-size: 0.6em;">
-<pre style="background: transparent; box-shadow: none; margin: 0; font-size: 1em;">
-  Virtual Machines                    Containers
-  ┌─────────────────────┐            ┌─────────────────────┐
-  │  App A  │  App B    │            │  App A  │  App B    │
-  │─────────│───────────│            │─────────│───────────│
-  │ Bins/   │ Bins/     │            │ Bins/   │ Bins/     │
-  │ Libs    │ Libs      │            │ Libs    │ Libs      │
-  │─────────│───────────│            │─────────────────────│
-  │ Guest   │ Guest     │            │   Container Engine  │
-  │ OS      │ OS        │            │     (Docker)        │
-  │─────────────────────│            │─────────────────────│
-  │     Hypervisor      │            │     Host OS         │
-  │─────────────────────│            │─────────────────────│
-  │     Host OS         │            │     Hardware        │
-  │─────────────────────│            └─────────────────────┘
-  │     Hardware        │
-  └─────────────────────┘
-</pre>
-                </div>
-                <table>
-                    <tr><th>Aspect</th><th>Virtual Machines</th><th>Containers</th></tr>
-                    <tr><td>Startup Time</td><td>Minutes</td><td>Seconds</td></tr>
-                    <tr><td>Resource Usage</td><td>Heavy (full OS)</td><td>Lightweight (shared kernel)</td></tr>
-                    <tr><td>Isolation</td><td>Strong (hardware-level)</td><td>Process-level</td></tr>
-                    <tr><td>Portability</td><td>Limited</td><td>Run anywhere with container runtime</td></tr>
-                    <tr><td>Density</td><td>Few per host</td><td>Many per host</td></tr>
-                </table>
-            </section>
-
             <!-- Amazon ECS Overview -->
             <section>
-                <h2><span class="emoji">🔶</span> Amazon Elastic Container Service (ECS)</h2>
+                <h2><span class="emoji">🔶</span> Amazon ECS and the Two Launch Types</h2>
                 <div class="two-column">
                     <div class="column">
                         <h3>What is ECS?</h3>
                         <ul>
                             <li><strong>Fully managed</strong> container orchestration service</li>
                             <li>No control plane to install, operate, or scale</li>
-                            <li>Deep integration with the AWS ecosystem</li>
-                            <li>Supports Docker containers natively</li>
+                            <li>Cluster management, scheduling, placement, scaling</li>
+                            <li>Deep AWS integration: IAM, ALB, CloudWatch, ECR, VPC</li>
                         </ul>
                         <div class="success">
                             <p><strong>Key Value:</strong> ECS removes the heavy lifting of managing container infrastructure so you can focus on your applications</p>
                         </div>
                     </div>
                     <div class="column">
-                        <h3>ECS Provides</h3>
-                        <ul>
-                            <li><strong>Cluster Management</strong> - logical grouping of resources</li>
-                            <li><strong>Container Orchestration</strong> - scheduling, placement, scaling</li>
-                            <li><strong>AWS Integration</strong> - IAM, ALB, CloudWatch, ECR, VPC</li>
-                        </ul>
-                        <h3>Who Uses ECS?</h3>
-                        <ul>
-                            <li>Samsung, Expedia, Capital One, Duolingo</li>
-                            <li>Startups to enterprise-scale production workloads</li>
-                        </ul>
+                        <h3>Fargate vs EC2</h3>
+                        <table>
+                            <tr><th>Aspect</th><th>Fargate</th><th>EC2</th></tr>
+                            <tr><td>Infrastructure</td><td>AWS manages compute</td><td>You manage instances</td></tr>
+                            <tr><td>Scaling</td><td>Automatic, per-task</td><td>Fleet + tasks</td></tr>
+                            <tr><td>Pricing</td><td>Per task (vCPU + memory)</td><td>Per EC2 instance</td></tr>
+                            <tr><td>Patching</td><td>AWS handles it</td><td>You patch</td></tr>
+                            <tr><td>Best For</td><td>Most workloads</td><td>GPU, custom OS</td></tr>
+                        </table>
+                        <div class="highlight">
+                            <p><strong>This course uses Fargate</strong> - the serverless launch type, so there are no servers to manage anywhere in the labs</p>
+                        </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Fargate vs EC2 -->
-            <section>
-                <h2><span class="emoji">🆚</span> ECS Launch Types: Fargate vs EC2</h2>
-                <table>
-                    <tr><th>Aspect</th><th>Fargate (Serverless)</th><th>EC2 (Self-Managed)</th></tr>
-                    <tr><td>Infrastructure</td><td>AWS manages compute</td><td>You manage EC2 instances</td></tr>
-                    <tr><td>Scaling</td><td>Automatic, per-task</td><td>Manage instance fleet + tasks</td></tr>
-                    <tr><td>Pricing</td><td>Pay per task (vCPU + memory)</td><td>Pay per EC2 instance</td></tr>
-                    <tr><td>Patching</td><td>AWS handles OS patching</td><td>You patch instances</td></tr>
-                    <tr><td>Control</td><td>Less (no SSH to host)</td><td>Full (SSH, custom AMIs)</td></tr>
-                    <tr><td>Best For</td><td>Most workloads, simplicity</td><td>GPU, custom OS, cost optimization at scale</td></tr>
-                </table>
-                <div class="success">
-                    <p><strong>This course uses Fargate</strong> - the serverless launch type that lets you focus on your containers without managing servers</p>
                 </div>
             </section>
 
@@ -755,6 +702,9 @@
                             <tr><td>2048 (2)</td><td>4-16 GB</td></tr>
                             <tr><td>4096 (4)</td><td>8-30 GB</td></tr>
                         </table>
+                        <div class="highlight">
+                            <p><strong>Our labs use</strong> <code>nginx:latest</code> at 256 CPU / 512 MB (Terraform) or 512 CPU / 1024 MB (Console)</p>
+                        </div>
                     </div>
                     <div class="column">
                         <h3>Container Definition (JSON)</h3>
@@ -771,6 +721,9 @@
         "protocol": "tcp"
       }
     ],
+    "environment": [
+      { "name": "ENV", "value": "prod" }
+    ],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
@@ -781,26 +734,13 @@
     }
   }
 ]</code></pre>
+                        <ul style="font-size: 0.8em;">
+                            <li><code>essential</code> - task stops when this container stops</li>
+                            <li><code>portMappings</code> - ports exposed from the container</li>
+                            <li><code>environment</code> - environment variables</li>
+                            <li><code>logConfiguration</code> - driver and options</li>
+                        </ul>
                     </div>
-                </div>
-            </section>
-
-            <!-- Container Definition Fields -->
-            <section>
-                <h2><span class="emoji">🔧</span> Container Definition Key Fields</h2>
-                <table>
-                    <tr><th>Field</th><th>Description</th><th>Example</th></tr>
-                    <tr><td><code>name</code></td><td>Container identifier within the task</td><td><code>"my-container"</code></td></tr>
-                    <tr><td><code>image</code></td><td>Docker image to run (Docker Hub or ECR)</td><td><code>"nginx:latest"</code></td></tr>
-                    <tr><td><code>cpu</code></td><td>CPU units for this container</td><td><code>256</code></td></tr>
-                    <tr><td><code>memory</code></td><td>Memory in MB (hard limit)</td><td><code>512</code></td></tr>
-                    <tr><td><code>essential</code></td><td>If true, task stops when this container stops</td><td><code>true</code></td></tr>
-                    <tr><td><code>portMappings</code></td><td>Ports exposed from the container</td><td><code>containerPort: 80</code></td></tr>
-                    <tr><td><code>environment</code></td><td>Environment variables for the container</td><td><code>[{"name":"ENV","value":"prod"}]</code></td></tr>
-                    <tr><td><code>logConfiguration</code></td><td>Logging driver and options</td><td><code>awslogs</code> driver</td></tr>
-                </table>
-                <div class="highlight">
-                    <p><strong>Our labs use:</strong> <code>nginx:latest</code> with 256 CPU / 512 MB memory (Terraform) or 512 CPU / 1024 MB memory (Console)</p>
                 </div>
             </section>
 
@@ -854,6 +794,12 @@
                         <div class="success">
                             <p><strong>awsvpc is required for Fargate</strong> - every Fargate task automatically gets its own ENI</p>
                         </div>
+                        <h3>Placement Is Automatic</h3>
+                        <ul>
+                            <li>Fargate places tasks for you - no instance capacity to manage</li>
+                            <li>Tasks are spread across the Availability Zones of the subnets you specify</li>
+                            <li>You supply CPU, memory, and subnets; AWS handles the rest</li>
+                        </ul>
                     </div>
                     <div class="column">
                         <h3>Network Architecture</h3>
@@ -1030,7 +976,6 @@ Task (nginx)
                     <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; margin: 20px 0;">
                         <h3>🎯 What You'll Build:</h3>
                         <ul style="font-size: 1.1em; line-height: 1.6;">
-                            <li>✅ Set up your Cloud9 development environment</li>
                             <li>✅ Create an ECS Fargate cluster</li>
                             <li>✅ Define a task definition for nginx</li>
                             <li>✅ Create an ALB with security groups and target group</li>
@@ -1178,42 +1123,6 @@ resource "aws_lb_listener" "listener" {
 
   depends_on = [aws_lb_listener.listener]
 }</code></pre>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Task Placement -->
-            <section>
-                <h2><span class="emoji">📍</span> Task Placement and Scheduling</h2>
-                <div class="two-column">
-                    <div class="column">
-                        <h3>Fargate Placement</h3>
-                        <ul>
-                            <li>Fargate handles placement <strong>automatically</strong></li>
-                            <li>Spreads tasks across Availability Zones</li>
-                            <li>No need to manage instance capacity</li>
-                            <li>Tasks run in your VPC subnets</li>
-                        </ul>
-                        <div class="success">
-                            <p><strong>With Fargate:</strong> You specify CPU, memory, and subnets. AWS handles everything else.</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <h3>EC2 Launch Type Strategies</h3>
-                        <p style="font-size: 0.7em;">(For reference - not used in this course)</p>
-                        <table>
-                            <tr><th>Strategy</th><th>Description</th></tr>
-                            <tr><td><strong>Binpack</strong></td><td>Pack tasks tightly to minimize instances</td></tr>
-                            <tr><td><strong>Spread</strong></td><td>Distribute across AZs or instances</td></tr>
-                            <tr><td><strong>Random</strong></td><td>Place tasks randomly</td></tr>
-                        </table>
-                        <h3>Placement Constraints</h3>
-                        <table>
-                            <tr><th>Constraint</th><th>Example</th></tr>
-                            <tr><td>AZ</td><td><code>attribute:ecs.availability-zone == us-east-1a</code></td></tr>
-                            <tr><td>Instance Type</td><td><code>attribute:ecs.instance-type == t2.small</code></td></tr>
-                            <tr><td>Distinct</td><td><code>type="distinctInstances"</code></td></tr>
-                        </table>
                     </div>
                 </div>
             </section>
@@ -1456,38 +1365,22 @@ resource "aws_lb_listener" "listener" {
                 </div>
             </section>
 
-            <!-- Reading the Config: Provider and Data Sources -->
+            <!-- Reading the Config: Data Sources vs Resources -->
             <section>
-                <h2><span class="emoji">📖</span> Reading Our ECS Config: Provider &amp; Data Sources</h2>
+                <h2><span class="emoji">📖</span> Reading Our ECS Config: Two Kinds of Block</h2>
                 <div class="two-column">
                     <div class="column">
-                        <h3>Provider Configuration</h3>
-                        <pre><code class="language-hcl">terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
+                        <h3><code>data</code> - Read What Exists</h3>
+                        <pre><code class="language-hcl">provider "aws" {
+  region = "us-east-1"
 }
 
-provider "aws" {
-  region = "us-east-1"
-}</code></pre>
-                        <ul>
-                            <li><code>required_providers</code> - lock the provider version</li>
-                            <li><code>provider "aws"</code> - configure region</li>
-                            <li>Credentials come from Cloud9 environment</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h3>Data Sources (Read Existing Resources)</h3>
-                        <pre><code class="language-hcl"># Look up the default VPC
+# Look up the default VPC
 data "aws_vpc" "default" {
   default = true
 }
 
-# Look up subnets in the default VPC
+# Look up its subnets
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
@@ -1495,124 +1388,39 @@ data "aws_subnets" "default" {
   }
 }
 
-# Look up existing IAM role
+# Look up the existing IAM role
 data "aws_iam_role" "ecs_execution_role" {
   name = "ecsTaskExecutionRole"
 }</code></pre>
                         <div class="highlight">
-                            <p><strong>Data sources read, resources create.</strong> We reuse existing VPC and IAM role instead of creating new ones.</p>
+                            <p>We <strong>reuse</strong> the default VPC and the <code>ecsTaskExecutionRole</code> instead of creating them.</p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3><code>resource</code> - Create and Manage</h3>
+                        <pre><code class="language-hcl">resource "aws_ecs_cluster" "main" {
+  name = "user0-cluster"
+}
+
+resource "aws_ecs_service" "nginx_service" {
+  name          = "user0-service"
+  cluster       = aws_ecs_cluster.main.id
+  launch_type   = "FARGATE"
+  desired_count = 1
+  ...
+}</code></pre>
+                        <ul style="font-size: 0.85em;">
+                            <li><code>aws_ecs_cluster</code> is the <strong>type</strong>; <code>"main"</code> is the local name you reference it by</li>
+                            <li><code>"user0-cluster"</code> is the name that appears in AWS</li>
+                            <li>One line replaces several console clicks</li>
+                        </ul>
+                        <div class="success">
+                            <p><strong>Data sources read, resources create.</strong> Every block in <code>main.tf</code> is one or the other.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <!-- Reading the Config: ECS Resources -->
-            <section>
-                <h2><span class="emoji">📖</span> Reading Our ECS Config: Cluster &amp; Task Definition</h2>
-                <div class="two-column">
-                    <div class="column">
-                        <h3>ECS Cluster</h3>
-                        <pre><code class="language-hcl">resource "aws_ecs_cluster" "main" {
-  name = "user0-cluster"
-}</code></pre>
-                        <ul>
-                            <li>One line to create what took several console clicks</li>
-                            <li><code>"main"</code> is the Terraform resource name (for referencing)</li>
-                            <li><code>"user0-cluster"</code> is the AWS cluster name</li>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h3>Task Definition</h3>
-                        <pre><code class="language-hcl">resource "aws_ecs_task_definition" "nginx" {
-  family                   = "user0-task"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = data.aws_iam_role
-                              .ecs_execution_role.arn
-  cpu                      = "256"
-  memory                   = "512"
-
-  container_definitions = jsonencode([{
-    name      = "user0-container"
-    image     = "nginx:latest"
-    cpu       = 256
-    memory    = 512
-    essential = true
-    portMappings = [{
-      containerPort = 80
-      protocol      = "tcp"
-    }]
-  }])
-}</code></pre>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Reading the Config: Networking -->
-            <section>
-                <h2><span class="emoji">📖</span> Reading Our ECS Config: ALB &amp; Service</h2>
-                <div class="two-column">
-                    <div class="column">
-                        <h3>Application Load Balancer</h3>
-                        <pre><code class="language-hcl">resource "aws_lb" "alb" {
-  name               = "user0-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [
-    aws_security_group.alb_sg.id
-  ]
-  subnets = data.aws_subnets.default.ids
-}
-
-resource "aws_lb_target_group" "tg" {
-  name        = "user0-target-group"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = data.aws_vpc.default.id
-  target_type = "ip"
-}
-
-resource "aws_lb_listener" "listener" {
-  load_balancer_arn = aws_lb.alb.arn
-  port              = 80
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
-  }
-}</code></pre>
-                    </div>
-                    <div class="column">
-                        <h3>ECS Service</h3>
-                        <pre><code class="language-hcl">resource "aws_ecs_service" "nginx_service" {
-  name            = "user0-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition
-                      .nginx.arn
-  launch_type     = "FARGATE"
-  desired_count   = 1
-
-  network_configuration {
-    subnets          = data.aws_subnets
-                        .default.ids
-    security_groups  = [
-      aws_security_group.ecs_sg.id
-    ]
-    assign_public_ip = true
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group
-                        .tg.arn
-    container_name   = "user0-container"
-    container_port   = 80
-  }
-
-  depends_on = [
-    aws_lb_listener.listener
-  ]
-}</code></pre>
-                    </div>
+                <div class="highlight">
+                    <p><span class="emoji">🔬</span> You will walk <code>main.tf</code> resource by resource in <strong>Lab 4, Exercise 4.1</strong> - with the file open in front of you</p>
                 </div>
             </section>
 
@@ -1645,13 +1453,13 @@ resource "aws_lb_listener" "listener" {
             <section class="lab-callout" data-background-color="#623ce4">
                 <div style="text-align: center; color: white;">
                     <h1><span class="emoji">🔬</span> Set Up Your Terraform Environment!</h1>
-                    <h2><span class="emoji">🔧</span> Lab 3: Install Terraform on Amazon Linux</h2>
+                    <h2><span class="emoji">🔧</span> Lab 3: Build Your Cloud9 Workstation</h2>
                     <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; margin: 20px 0;">
                         <h3>🎯 What You'll Do:</h3>
                         <ul style="font-size: 1.1em; line-height: 1.6;">
-                            <li>✅ Install Terraform on Amazon Linux (Cloud9)</li>
-                            <li>✅ Verify installation and explore commands</li>
-                            <li>✅ Verify AWS credentials and region</li>
+                            <li>✅ Create your Cloud9 environment on Amazon Linux</li>
+                            <li>✅ Run <code>bootstrap.sh</code> — 100 GB disk + every tool you need</li>
+                            <li>✅ Verify Terraform, AWS credentials, and region</li>
                             <li>✅ Create an ECS cluster with Terraform</li>
                             <li>✅ Destroy it — full init/plan/apply/destroy lifecycle</li>
                         </ul>
@@ -1917,7 +1725,6 @@ output "service_name" {
                         <ul style="font-size: 1.1em; line-height: 1.6;">
                             <li>✅ Scale the service from 1 to 3 tasks</li>
                             <li>✅ Modify container CPU and memory</li>
-                            <li>✅ Add Terraform outputs for the ALB DNS</li>
                             <li>✅ Run terraform destroy to clean up everything</li>
                             <li>✅ Verify all resources are removed</li>
                         </ul>
@@ -1933,61 +1740,42 @@ output "service_name" {
             <!-- COURSE RECAP                                 -->
             <!-- ============================================ -->
 
-            <!-- Recap: ECS Concepts -->
+            <!-- Course Recap -->
             <section>
-                <h2><span class="emoji">📝</span> Course Recap: ECS Concepts</h2>
+                <h2><span class="emoji">📝</span> Course Recap</h2>
                 <div class="two-column">
                     <div class="column">
-                        <h3>Core Architecture</h3>
-                        <ul>
+                        <h3>ECS Architecture</h3>
+                        <ul style="font-size: 0.85em;">
                             <li><strong>Cluster</strong> - logical grouping of tasks and services</li>
                             <li><strong>Task Definition</strong> - blueprint (image, CPU, memory, ports)</li>
                             <li><strong>Task</strong> - running instance of a task definition</li>
                             <li><strong>Service</strong> - maintains desired count, handles deployments</li>
                             <li><strong>Fargate</strong> - serverless compute, no servers to manage</li>
                         </ul>
-                    </div>
-                    <div class="column">
                         <h3>Production Patterns</h3>
-                        <ul>
+                        <ul style="font-size: 0.85em;">
                             <li><strong>ALB</strong> - single DNS, health checks, traffic distribution</li>
                             <li><strong>Security Groups</strong> - ALB SG + ECS SG layered security</li>
                             <li><strong>IAM Roles</strong> - execution role vs task role</li>
                             <li><strong>awsvpc</strong> - each task gets its own ENI</li>
-                            <li><strong>Scaling</strong> - manual (desired_count) or auto scaling</li>
-                            <li><strong>Logging</strong> - CloudWatch Logs with awslogs driver</li>
+                            <li><strong>Scaling &amp; Logging</strong> - desired count, CloudWatch Logs</li>
                         </ul>
                     </div>
-                </div>
-            </section>
-
-            <!-- Recap: Terraform + ECS -->
-            <section>
-                <h2><span class="emoji">📝</span> Course Recap: Terraform + ECS</h2>
-                <div class="two-column">
                     <div class="column">
-                        <h3>IaC Benefits Demonstrated</h3>
-                        <table>
+                        <h3>Console vs Terraform</h3>
+                        <table style="font-size: 0.8em;">
                             <tr><th>Aspect</th><th>Console</th><th>Terraform</th></tr>
                             <tr><td>Deploy</td><td>20+ min clicking</td><td>1 command, 3 min</td></tr>
                             <tr><td>Repeatability</td><td>Remember every click</td><td>Code is documentation</td></tr>
                             <tr><td>Scaling</td><td>Navigate menus</td><td>Change one number</td></tr>
                             <tr><td>Cleanup</td><td>8+ manual steps</td><td><code>terraform destroy</code></td></tr>
                             <tr><td>Collaboration</td><td>Screenshots?</td><td>Git version control</td></tr>
-                            <tr><td>Audit Trail</td><td>CloudTrail</td><td>Git history + CloudTrail</td></tr>
                         </table>
-                    </div>
-                    <div class="column">
-                        <h3>Terraform Workflow Mastered</h3>
-                        <ul>
-                            <li><code>terraform init</code> - download providers</li>
-                            <li><code>terraform plan</code> - preview changes</li>
-                            <li><code>terraform apply</code> - create/update resources</li>
-                            <li><code>terraform state list</code> - inspect what's managed</li>
-                            <li><code>terraform destroy</code> - clean teardown</li>
-                        </ul>
+                        <h3>Workflow Mastered</h3>
+                        <p style="font-size: 0.85em;"><code>init</code> &rarr; <code>plan</code> &rarr; <code>apply</code> &rarr; <code>state list</code> &rarr; <code>destroy</code></p>
                         <div class="success">
-                            <p><strong>Key Resources Deployed:</strong> ECS cluster, task definition, service, ALB, target group, listener, 2 security groups - all from a single <code>main.tf</code> file</p>
+                            <p><strong>Deployed:</strong> ECS cluster, task definition, service, ALB, target group, listener, 2 security groups - all from a single <code>main.tf</code></p>
                         </div>
                     </div>
                 </div>
@@ -2000,6 +1788,7 @@ output "service_name" {
                     <div class="column">
                         <h3>Bonus Labs (in <code>next_steps/</code>)</h3>
                         <ul>
+                            <li><strong>Terraform Outputs</strong> - expose the ALB DNS and cluster names as outputs (15 min)</li>
                             <li><strong>Write a Terraform Resource</strong> - add a CloudWatch log group and wire container logging (30 min)</li>
                             <li><strong>Build &amp; Deploy a Custom Image</strong> - create an ECR repo, build a Docker image, push and deploy (45 min)</li>
                             <li><strong>ECS Service Auto Scaling</strong> - add a target-tracking policy that scales on CPU utilization (30 min)</li>

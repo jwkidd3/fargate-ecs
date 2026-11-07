@@ -3,7 +3,7 @@
 **Duration:** 30 minutes
 **Difficulty:** Introductory
 **Day:** 1
-**Environment:** AWS Cloud9
+**Environment:** AWS Management Console (no terminal required)
 
 ---
 
@@ -22,8 +22,11 @@ In this lab you will scale your ECS Fargate service to multiple tasks, observe t
 ## Prerequisites
 
 - Completed **Lab 1** (all resources still deployed: cluster, task definition, ALB, service)
-- AWS Cloud9 environment open and connected
 - Your unique student prefix (referred to as `userX` throughout this lab)
+- The ALB DNS name from Lab 1 (**EC2 Console** > **Load Balancers** > `userX-alb`)
+
+> **Note:** Like Lab 1, this lab is entirely console-based. You build your Cloud9
+> workstation in [Lab 3](../lab03/README.md).
 
 ---
 
@@ -52,19 +55,18 @@ Scaling a Fargate service is as simple as changing the desired task count. The A
 2. Click the **Targets** tab
 3. Confirm that **3 targets** are registered and in a **healthy** state (this may take 1-2 minutes)
 
-### Step 4 — Test Load Balancing
+### Step 4 — Generate Traffic Across the Tasks
 
-Run multiple requests from your Cloud9 terminal to observe traffic distribution:
+1. Open the ALB DNS name in a browser tab: `http://userX-alb-123456789.us-east-1.elb.amazonaws.com`
+2. Hard-reload the page **at least 15 times** (`Ctrl+Shift+R`, or `Cmd+Shift+R` on a Mac)
 
-```bash
-for i in {1..10}; do
-  curl -s -o /dev/null -w "Request $i: HTTP %{http_code}\n" http://userX-alb-123456789.us-east-1.elb.amazonaws.com
-done
-```
+Every reload returns the same Nginx welcome page, so the browser gives no hint
+about which task served it. The ALB has been spreading those requests across all
+three tasks using a round-robin algorithm — and you will **see the proof in
+Exercise 2.2**, where each task writes to its own CloudWatch log stream.
 
-> **Note:** Replace the URL with your actual ALB DNS name from Lab 1.
-
-All 10 requests should return `HTTP 200`. The ALB distributes these across your 3 tasks using a round-robin algorithm.
+> **Why hard-reload?** A normal reload is often served from the browser cache and
+> never reaches the ALB at all.
 
 ---
 
@@ -82,16 +84,21 @@ The task definition from Lab 1 uses the **awslogs** log driver, which sends cont
 
 1. Click on your log group
 2. You will see **one log stream per running task** — you should see 3 streams (one for each of the scaled tasks)
-3. Click on any log stream to view its contents
+3. Click into **each** of the three streams in turn
+
+**This is the payoff from Step 4:** your 15 browser reloads are divided across all
+three streams. No single task served them all — that is the load balancer
+distributing traffic, visible in the logs.
 
 ### Step 3 — Examine Nginx Access Logs
 
 1. Inside a log stream, you will see nginx access log entries
-2. Each entry shows the request from the ALB health check (`ELB-HealthChecker/2.0`) and any `curl` requests you made
-3. Example log line:
+2. Each entry shows the request from the ALB health check (`ELB-HealthChecker/2.0`) and the page loads from your browser
+3. Example log lines — the health checker and your browser, side by side:
 
 ```
-10.0.1.50 - - [22/Feb/2026:14:30:00 +0000] "GET / HTTP/1.1" 200 615 "-" "curl/7.88.1"
+10.0.1.50 - - [22/Feb/2026:14:30:00 +0000] "GET / HTTP/1.1" 200 615 "-" "ELB-HealthChecker/2.0"
+10.0.1.50 - - [22/Feb/2026:14:30:04 +0000] "GET / HTTP/1.1" 200 615 "-" "Mozilla/5.0 ..."
 ```
 
 ### Step 4 — Understand the awslogs Driver Configuration
@@ -208,11 +215,11 @@ Notice how many manual steps were required to clean up these resources — and i
 ## Next Steps
 
 In the afternoon Terraform labs, you will:
-- **Lab 3**: Install Terraform on your Cloud9 environment and verify it works with AWS
+- **Lab 3**: Create your Cloud9 environment, run the bootstrap script, and verify Terraform works with AWS
 - **Lab 4**: Deploy the **same ECS Fargate architecture** from Labs 1 and 2 — but entirely through code with a single `terraform apply`
 - **Lab 5**: Scale, modify, and destroy your infrastructure with simple code changes
 
-> **Keep your Cloud9 environment open.** You will continue using it for the Terraform labs this afternoon.
+> **You do not have a Cloud9 environment yet** — you build one at the start of Lab 3, and use it for the rest of the course.
 
 ---
 
